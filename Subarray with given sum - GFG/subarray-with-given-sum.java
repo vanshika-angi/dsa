@@ -39,6 +39,17 @@ class Main{
 class Solution
 {
     //Function to find a continuous sub-array which adds up to a given number.
+    static boolean isValid(int sum,int s, int l, int r, ArrayList<Integer> ans)
+    {
+       
+       if(sum==s)
+       {
+          ans.add(l+1);
+          ans.add(r+1);
+          return true;
+       } 
+       return false;
+    }
     static ArrayList<Integer> subarraySum(int[] arr, int n, int s) 
     {
         ArrayList<Integer> ans=new ArrayList<Integer>();
@@ -53,24 +64,18 @@ class Solution
        for( r=0;r<n;r++)
        {
            sum=sum+arr[r];
-           if(sum==s)
+           
+           if(isValid(sum,s,l,r,ans))
            {
-            //   System.out.println(sum);
-              ans.add(l+1);
-              ans.add(r+1);
               return ans;
            }
            
            while(sum>s)
            {
-            //   System.out.println(sum);
                sum=sum-arr[l];
                l++;
-               if(sum==s)
+               if(isValid(sum,s,l,r,ans))
                {
-                //   System.out.println(sum);
-                  ans.add(l+1);
-                  ans.add(r+1);
                   return ans;
                }
            }
