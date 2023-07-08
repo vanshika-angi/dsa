@@ -14,21 +14,12 @@ class Solution
     //Function to check if the number is sparse or not.
     public static boolean isSparse(int N)
     {
-        int ans=0,count=0;
+        
         // boolean ans=false;
         while(N!=0)
         {
-            if((N&1) != 0)
-            {
-                count++;
-                if(count>ans)ans=count;
-                if(ans>=2)return false;
-            }
-            else
-            {
-                count=0;
-            }
-            N=N>>1;
+            if((N&(N<<1))!=0)return false;
+            N=N/2;
         }
         
         return true;
