@@ -6,7 +6,7 @@ using namespace std;
 class Solution {
   public:
     // Function to detect cycle in an undirected graph.
-    bool detect(int src,vector<int> adj[],vector<int>&vis)
+    bool bfsdetect(int src,vector<int> adj[],vector<int>&vis)
     {
         vis[src]=1;
         queue<pair<int,int>>q;
@@ -37,15 +37,41 @@ class Solution {
         }
         return false;
     }
+    
+    bool dfs(int node,int parent,vector<int>&vis, vector<int> adj[])
+    {
+        vis[node]=1;
+        
+        for(auto adjacentNode: adj[node])
+        {
+            //if neighbour is not visiited, go into depth of it
+            if(!vis[adjacentNode])
+            {
+                //if we detect cycle in future.
+                if(dfs(adjacentNode,node,vis,adj)==true)
+                return true;
+            }
+            //adjaceentNode has been already presennt in path and it is not parent, meaning it is a cyel
+            else if(adjacentNode!=parent)
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
     bool isCycle(int V, vector<int> adj[]) {
         
         vector<int>vis(V,0);
         
+        
+        
         for(int i=0;i<V;i++)
         {
+            //This for loop is required for component graphs
             if(!vis[i])
             {
-                if(detect(i,adj,vis))
+                if(dfs(i,-1,vis,adj))
                 {
                     return true;
                 }
