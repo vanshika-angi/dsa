@@ -21,24 +21,19 @@ class Solution {
         
         vector<int>dist(N,1e9);
         dist[src]=0;
-        queue<pair<int,int>>q;
-        q.push({src,0});
+        queue<int>q;
+        q.push(src);
         
         while(!q.empty())
         {
-            int node=q.front().first;
-            int dt=q.front().second;
+            int node=q.front();
             q.pop();
             for(auto it:adj[node])
             {
-                if(dist[it]==1e9)
+                if(dist[it]>dist[node]+1)
                 {
-                   dist[it]=min(dist[it],dt+1);
-                   q.push({it,dist[it]});
-                }
-                else
-                {
-                    dist[it]=min(dist[it],dt+1);
+                    dist[it]=dist[node]+1;
+                    q.push(it);
                 }
             }
         }
