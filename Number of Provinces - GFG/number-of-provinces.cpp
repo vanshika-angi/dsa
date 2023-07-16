@@ -5,50 +5,90 @@ using namespace std;
 
 // } Driver Code Ends
 //User function Template for C++
+class DisjointSet{
+    vector<int>rank,parent,size;
+    
+public:
 
-class Solution {
-  public:
-  
-    void dfs(int node,int V,vector<int> adj[],vector<int>&vis)
+    DisjointSet(int n)
     {
-        vis[node]=1;
-        //dfs traversals
-        for(auto it:adj[node])
+        rank.resize(n+1,0);
+        parent.resize(n+1,0);
+        size.resize(n+1,1);
+        for(int i=0;i<=n;i++)
         {
-            if(vis[it]==0)dfs(it,V,adj,vis);
+            parent[i]=i;
         }
     }
     
-    int numProvinces(vector<vector<int>> adj, int V) {
-        vector<int>adjLs[V];
+    int findParent(int node)
+    {
+        if(node==parent[node])return node;
+        else return parent[node] = findParent(parent[node]);
+    }
+    
+    void unionByRank(int u,int v)
+    {
+        int upu=findParent(u);
+        int upv=findParent(v);
+        if(upu==upv)return;
         
-        //to change adjaceny matric to adjaceny list
+        if(rank[upu]<rank[upv])
+        {
+            parent[upu]=upv;
+        }
+        else if(rank[upv]<rank[upu])
+        {
+            parent[upu]=upv;
+        }
+        else
+        {
+           parent[upu]=upv; 
+           rank[upu]++;
+        }
+    }
+    
+    void unionBySize(int u,int v)
+    {
+        int upu=findParent(u);
+        int upv=findParent(v);
+        if(upu==upv)return;
+        
+        if(size[upu]<size[upv])
+        {
+            parent[upu]=upv;
+            size[upv]+=size[upu];
+        }
+        else 
+        {
+            parent[upv]=upu;
+            size[upu]+=size[upv];
+        }
+        
+    }
+    
+};
+
+
+class Solution {
+  public:
+    int numProvinces(vector<vector<int>> adj, int V) {
+        DisjointSet ds(V);
         for(int i=0;i<V;i++)
         {
             for(int j=0;j<V;j++)
             {
-                if(adj[i][j]==1 && i!=j)
-                {
-                    adjLs[i].push_back(j);
-                    adjLs[j].push_back(j);
-                }
+                if(adj[i][j]==1)ds.unionBySize(i,j);
             }
         }
         
-        
-        vector<int>vis(V,0);
-        int provinces=0;
+        int cnt=0;
         for(int i=0;i<V;i++)
         {
-            if(vis[i]==0)
-            {
-                dfs(i,V,adjLs,vis);
-                provinces++;
-                
-            }
+            if(ds.findParent(i)==i)cnt++;
         }
         
-        return provinces;
+        return cnt;
     }
 };
 
