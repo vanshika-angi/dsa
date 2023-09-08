@@ -1,18 +1,17 @@
 class Solution {
 public:
     bool canJump(vector<int>& nums) {
-     int maxidx=0;
-
-     for(int i=0;i<=maxidx;i++)
-     {
-         maxidx=max(i+nums[i],maxidx);
-        //  cout<<nums[i]<<" "<<maxidx<<endl;
-         if(maxidx>=nums.size()-1)
-         {
-             return true;
-         }
-     }   
-
-     return false;
+        int maxI=0;
+        int n=nums.size();
+        for(int i=0;i<n;i++)
+        {
+            if(i<=maxI)
+            {
+              maxI = max(maxI, i + nums[i]);  
+            }
+            
+        }
+        if(maxI>=n-1)return true;
+        return false;
     }
 };
