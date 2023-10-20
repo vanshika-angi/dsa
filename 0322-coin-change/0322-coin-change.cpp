@@ -1,35 +1,29 @@
 class Solution {
 public:
-    // int ans=INT_MAX;
-//     int f(int ind,int amount,vector<int>&coins,vector<vector<int>>&dp)
-//     {
-//         if(ind==coins.size()-1)
-//         {
-//             // cout<<ind<<" "<<amount<<endl;
-//             if(amount%coins[ind]==0)return amount/coins[ind];
-//             return 1e9;
-//         }
-//         if(dp[ind][amount]!=-1)return dp[ind][amount];
-        
-//         int notpick = f(ind+1,amount,coins,dp);
-//         int pick=1e9;
-//         if(amount-coins[ind]>=0)pick = 1 + f(ind,amount-coins[ind],coins,dp);
-//         return dp[ind][amount]=min(notpick,pick);
-//     }
-    int coinChange(vector<int>& coins, int amount) {
-        int n=coins.size();
-        vector<int>dp(amount+1,1e9);
-        dp[0]=0;
-        for(int i=1;i<=amount;i++)
+    int helper(int i,int amount,vector<int>& coins,vector<vector<int>>&dp)
+    {
+       
+        if(i==0)
         {
-            for(int j=0;j<n;j++)
-            {
-                
-                if(i>=coins[j])dp[i] = min(dp[i],dp[i-coins[j]]+1);
-            }
+
+            if(amount%coins[i]==0)return amount/coins[i];
+            else return 1e9;
         }
         
-       return dp[amount]>=1e9?-1:dp[amount];
+        if(dp[i][amount]!=-1)return dp[i][amount];
+        int pick=1e9;
+        if(coins[i]<=amount)
+            pick = 1 + helper(i,amount-coins[i],coins,dp);
+            
+    
+        int notpick = 0 + helper(i-1,amount,coins,dp);
         
+        return dp[i][amount] = min(pick,notpick);
+    }
+    int coinChange(vector<int>& coins, int amount) {
+        int n=coins.size();
+        vector<vector<int>>dp(n,vector<int>(amount+1,-1));
+        int ans =  helper(n-1,amount,coins,dp);
+        return ans>=1e9?-1:ans;
     }
 };
