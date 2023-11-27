@@ -14,7 +14,7 @@ public:
                 start = min(start,intervals[i][0]);
                 end = max(end,intervals[i][1]);
             }
-            else if(start<intervals[i][1] && end<intervals[i][0])
+            else if(start<intervals[i][0] && end<intervals[i][0])
             {
                 ans.push_back({start,end});
                 start = intervals[i][0];
